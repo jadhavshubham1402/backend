@@ -17,6 +17,7 @@ const {
 } = require("../service/service");
 const User = require("../model/user");
 const Product = require("../model/product");
+const Order = require("../model/order");
 require("dotenv").config();
 
 async function loginUser(req, res, next) {
@@ -435,12 +436,14 @@ async function createOrderData(req, res, next) {
 
 async function getOrdersData(req, res, next) {
   try {
-    if (req.decoded.user.role !== "Manager") {
-      throw new Error("Only Managers can view orders");
-    }
+    // if (req.decoded.user.role !== "Admin") {
+    //   throw new Error("Only Managers can view orders");
+    // }
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
-    const employees = await User.find({ managerId: req.decoded.user.id })
+    const employees = await User.find({
+      $or: [{ managerId: req.decoded.user.id }, { _id: req.decoded.user.id }],
+    })
       .select("_id")
       .lean();
     const employeeIds = employees.map((emp) => emp._id);

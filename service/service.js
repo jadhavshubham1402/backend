@@ -73,6 +73,7 @@ function createOrder(orderData) {
 function getOrdersByEmployeeIds(employeeIds, page, limit) {
   return Order.find({ employeeId: { $in: employeeIds } })
     .populate("productId")
+    .populate("employeeId")
     .skip((page - 1) * limit)
     .limit(limit);
 }

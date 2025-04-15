@@ -104,7 +104,12 @@ router.get(
 
 // Order Management
 router.post("/orders", authorize, restrictTo(["Employee"]), createOrderData);
-router.get("/orders", authorize, restrictTo(["Manager"]), getOrdersData);
+router.get(
+  "/orders",
+  authorize,
+  restrictTo(["Manager", "Employee"]),
+  getOrdersData
+);
 router.put("/orders", authorize, restrictTo(["Manager"]), updateOrderData);
 
 module.exports = router;
